@@ -1,3 +1,4 @@
 /GreenAppEntities/target/
 /GreenAppWeb/target/
-/GreenAppFront/node_modules
+/GreenAppFront/node_modules/
+/GreenAppFront/dist/

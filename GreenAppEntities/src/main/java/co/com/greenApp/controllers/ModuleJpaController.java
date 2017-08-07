@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package co.com.greenApp.controllers;
 
 import co.com.greenApp.controllers.exceptions.IllegalOrphanException;
@@ -18,8 +17,11 @@ import java.util.ArrayList;
 import java.util.List;
 import co.com.greenApp.entities.Foro;
 import co.com.greenApp.entities.Module;
+import co.com.greenApp.entities.Module_;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Predicate;
 
 /**
  *
@@ -250,6 +252,39 @@ public class ModuleJpaController implements Serializable {
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
+        } finally {
+            em.close();
+        }
+    }
+
+    /**
+     * Método que consulta la información de un modulo por medio de su nombre
+     * @param nameModule
+     * @return Module
+     * @throws Exception 
+     */
+    public Module getModuleByName(String nameModule) throws Exception{
+        EntityManager em = getEntityManager();
+        try {
+            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            Root<Module> module = cq.from(Module.class);
+            cq.select(module);
+            List<Predicate> predicates = new ArrayList<>();
+            
+            predicates.add(cb.equal(module.get(Module_.name), nameModule));
+            
+            cq.where(predicates.toArray(new Predicate[predicates.size()]));
+            Query q = em.createQuery(cq);
+
+            if (q.getResultList() != null && !q.getResultList().isEmpty()) {
+                return (Module) q.getResultList().get(q.getResultList().size() - 1);
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         } finally {
             em.close();
         }

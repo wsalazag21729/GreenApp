@@ -14,9 +14,14 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import co.com.greenApp.entities.Module;
 import co.com.greenApp.entities.ModuleDescription;
+import co.com.greenApp.entities.ModuleDescription_;
+import co.com.greenApp.entities.Module_;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Predicate;
 
 /**
  *
@@ -161,6 +166,39 @@ public class ModuleDescriptionJpaController implements Serializable {
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
+        } finally {
+            em.close();
+        }
+    }
+    
+    /**
+     * Método que consulta la información de la descripción del módulo
+     * @param idModule
+     * @return ModuleDescription
+     * @throws Exception 
+     */
+    public ModuleDescription getModuleDescriptionByIdModule(Integer idModule) throws Exception{
+        EntityManager em = getEntityManager();
+        try {
+            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            Root<ModuleDescription> module = cq.from(ModuleDescription.class);
+            cq.select(module);
+            List<Predicate> predicates = new ArrayList<>();
+            
+            predicates.add(cb.equal(module.get(ModuleDescription_.idModule).get(Module_.idModule), idModule));
+            
+            cq.where(predicates.toArray(new Predicate[predicates.size()]));
+            Query q = em.createQuery(cq);
+
+            if (q.getResultList() != null && !q.getResultList().isEmpty()) {
+                return (ModuleDescription) q.getResultList().get(q.getResultList().size() - 1);
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         } finally {
             em.close();
         }

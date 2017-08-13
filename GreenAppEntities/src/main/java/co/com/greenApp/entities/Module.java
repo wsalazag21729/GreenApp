@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package co.com.greenApp.entities;
 
 import java.io.Serializable;
@@ -52,7 +46,7 @@ public class Module implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idModule", fetch = FetchType.LAZY)
     private List<ModuleDescription> moduleDescriptionList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idModule", fetch = FetchType.LAZY)
-    private List<Foro> foroList;
+    private List<Discussion> discussionList;
 
     public Module() {
     }
@@ -101,12 +95,12 @@ public class Module implements Serializable {
     }
 
     @XmlTransient
-    public List<Foro> getForoList() {
-        return foroList;
+    public List<Discussion> getDiscussionList() {
+        return discussionList;
     }
 
-    public void setForoList(List<Foro> foroList) {
-        this.foroList = foroList;
+    public void setDiscussionList(List<Discussion> discussionList) {
+        this.discussionList = discussionList;
     }
 
     @Override

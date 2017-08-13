@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package co.com.greenApp.controllers;
 
 import co.com.greenApp.controllers.exceptions.NonexistentEntityException;
@@ -170,14 +164,15 @@ public class ModuleDescriptionJpaController implements Serializable {
             em.close();
         }
     }
-    
+
     /**
      * Método que consulta la información de la descripción del módulo
+     *
      * @param idModule
      * @return ModuleDescription
-     * @throws Exception 
+     * @throws Exception
      */
-    public ModuleDescription getModuleDescriptionByIdModule(Integer idModule) throws Exception{
+    public ModuleDescription getModuleDescriptionByIdModule(Integer idModule) throws Exception {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
@@ -185,9 +180,9 @@ public class ModuleDescriptionJpaController implements Serializable {
             Root<ModuleDescription> module = cq.from(ModuleDescription.class);
             cq.select(module);
             List<Predicate> predicates = new ArrayList<>();
-            
+
             predicates.add(cb.equal(module.get(ModuleDescription_.idModule).get(Module_.idModule), idModule));
-            
+
             cq.where(predicates.toArray(new Predicate[predicates.size()]));
             Query q = em.createQuery(cq);
 

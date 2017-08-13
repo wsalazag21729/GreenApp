@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package co.com.greenApp.controllers;
 
 import co.com.greenApp.controllers.exceptions.IllegalOrphanException;
@@ -15,7 +10,7 @@ import javax.persistence.criteria.Root;
 import co.com.greenApp.entities.ModuleDescription;
 import java.util.ArrayList;
 import java.util.List;
-import co.com.greenApp.entities.Foro;
+import co.com.greenApp.entities.Discussion;
 import co.com.greenApp.entities.Module;
 import co.com.greenApp.entities.Module_;
 import javax.persistence.EntityManager;
@@ -42,8 +37,8 @@ public class ModuleJpaController implements Serializable {
         if (module.getModuleDescriptionList() == null) {
             module.setModuleDescriptionList(new ArrayList<ModuleDescription>());
         }
-        if (module.getForoList() == null) {
-            module.setForoList(new ArrayList<Foro>());
+        if (module.getDiscussionList() == null) {
+            module.setDiscussionList(new ArrayList<Discussion>());
         }
         EntityManager em = null;
         try {
@@ -55,12 +50,12 @@ public class ModuleJpaController implements Serializable {
                 attachedModuleDescriptionList.add(moduleDescriptionListModuleDescriptionToAttach);
             }
             module.setModuleDescriptionList(attachedModuleDescriptionList);
-            List<Foro> attachedForoList = new ArrayList<Foro>();
-            for (Foro foroListForoToAttach : module.getForoList()) {
-                foroListForoToAttach = em.getReference(foroListForoToAttach.getClass(), foroListForoToAttach.getIdForo());
-                attachedForoList.add(foroListForoToAttach);
+            List<Discussion> attachedDiscussionList = new ArrayList<Discussion>();
+            for (Discussion discussionListDiscussionToAttach : module.getDiscussionList()) {
+                discussionListDiscussionToAttach = em.getReference(discussionListDiscussionToAttach.getClass(), discussionListDiscussionToAttach.getIdDiscussion());
+                attachedDiscussionList.add(discussionListDiscussionToAttach);
             }
-            module.setForoList(attachedForoList);
+            module.setDiscussionList(attachedDiscussionList);
             em.persist(module);
             for (ModuleDescription moduleDescriptionListModuleDescription : module.getModuleDescriptionList()) {
                 Module oldIdModuleOfModuleDescriptionListModuleDescription = moduleDescriptionListModuleDescription.getIdModule();
@@ -71,13 +66,13 @@ public class ModuleJpaController implements Serializable {
                     oldIdModuleOfModuleDescriptionListModuleDescription = em.merge(oldIdModuleOfModuleDescriptionListModuleDescription);
                 }
             }
-            for (Foro foroListForo : module.getForoList()) {
-                Module oldIdModuleOfForoListForo = foroListForo.getIdModule();
-                foroListForo.setIdModule(module);
-                foroListForo = em.merge(foroListForo);
-                if (oldIdModuleOfForoListForo != null) {
-                    oldIdModuleOfForoListForo.getForoList().remove(foroListForo);
-                    oldIdModuleOfForoListForo = em.merge(oldIdModuleOfForoListForo);
+            for (Discussion discussionListDiscussion : module.getDiscussionList()) {
+                Module oldIdModuleOfDiscussionListDiscussion = discussionListDiscussion.getIdModule();
+                discussionListDiscussion.setIdModule(module);
+                discussionListDiscussion = em.merge(discussionListDiscussion);
+                if (oldIdModuleOfDiscussionListDiscussion != null) {
+                    oldIdModuleOfDiscussionListDiscussion.getDiscussionList().remove(discussionListDiscussion);
+                    oldIdModuleOfDiscussionListDiscussion = em.merge(oldIdModuleOfDiscussionListDiscussion);
                 }
             }
             em.getTransaction().commit();
@@ -96,8 +91,8 @@ public class ModuleJpaController implements Serializable {
             Module persistentModule = em.find(Module.class, module.getIdModule());
             List<ModuleDescription> moduleDescriptionListOld = persistentModule.getModuleDescriptionList();
             List<ModuleDescription> moduleDescriptionListNew = module.getModuleDescriptionList();
-            List<Foro> foroListOld = persistentModule.getForoList();
-            List<Foro> foroListNew = module.getForoList();
+            List<Discussion> discussionListOld = persistentModule.getDiscussionList();
+            List<Discussion> discussionListNew = module.getDiscussionList();
             List<String> illegalOrphanMessages = null;
             for (ModuleDescription moduleDescriptionListOldModuleDescription : moduleDescriptionListOld) {
                 if (!moduleDescriptionListNew.contains(moduleDescriptionListOldModuleDescription)) {
@@ -107,12 +102,12 @@ public class ModuleJpaController implements Serializable {
                     illegalOrphanMessages.add("You must retain ModuleDescription " + moduleDescriptionListOldModuleDescription + " since its idModule field is not nullable.");
                 }
             }
-            for (Foro foroListOldForo : foroListOld) {
-                if (!foroListNew.contains(foroListOldForo)) {
+            for (Discussion discussionListOldDiscussion : discussionListOld) {
+                if (!discussionListNew.contains(discussionListOldDiscussion)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Foro " + foroListOldForo + " since its idModule field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Discussion " + discussionListOldDiscussion + " since its idModule field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -125,13 +120,13 @@ public class ModuleJpaController implements Serializable {
             }
             moduleDescriptionListNew = attachedModuleDescriptionListNew;
             module.setModuleDescriptionList(moduleDescriptionListNew);
-            List<Foro> attachedForoListNew = new ArrayList<Foro>();
-            for (Foro foroListNewForoToAttach : foroListNew) {
-                foroListNewForoToAttach = em.getReference(foroListNewForoToAttach.getClass(), foroListNewForoToAttach.getIdForo());
-                attachedForoListNew.add(foroListNewForoToAttach);
+            List<Discussion> attachedDiscussionListNew = new ArrayList<Discussion>();
+            for (Discussion discussionListNewDiscussionToAttach : discussionListNew) {
+                discussionListNewDiscussionToAttach = em.getReference(discussionListNewDiscussionToAttach.getClass(), discussionListNewDiscussionToAttach.getIdDiscussion());
+                attachedDiscussionListNew.add(discussionListNewDiscussionToAttach);
             }
-            foroListNew = attachedForoListNew;
-            module.setForoList(foroListNew);
+            discussionListNew = attachedDiscussionListNew;
+            module.setDiscussionList(discussionListNew);
             module = em.merge(module);
             for (ModuleDescription moduleDescriptionListNewModuleDescription : moduleDescriptionListNew) {
                 if (!moduleDescriptionListOld.contains(moduleDescriptionListNewModuleDescription)) {
@@ -144,14 +139,14 @@ public class ModuleJpaController implements Serializable {
                     }
                 }
             }
-            for (Foro foroListNewForo : foroListNew) {
-                if (!foroListOld.contains(foroListNewForo)) {
-                    Module oldIdModuleOfForoListNewForo = foroListNewForo.getIdModule();
-                    foroListNewForo.setIdModule(module);
-                    foroListNewForo = em.merge(foroListNewForo);
-                    if (oldIdModuleOfForoListNewForo != null && !oldIdModuleOfForoListNewForo.equals(module)) {
-                        oldIdModuleOfForoListNewForo.getForoList().remove(foroListNewForo);
-                        oldIdModuleOfForoListNewForo = em.merge(oldIdModuleOfForoListNewForo);
+            for (Discussion discussionListNewDiscussion : discussionListNew) {
+                if (!discussionListOld.contains(discussionListNewDiscussion)) {
+                    Module oldIdModuleOfDiscussionListNewDiscussion = discussionListNewDiscussion.getIdModule();
+                    discussionListNewDiscussion.setIdModule(module);
+                    discussionListNewDiscussion = em.merge(discussionListNewDiscussion);
+                    if (oldIdModuleOfDiscussionListNewDiscussion != null && !oldIdModuleOfDiscussionListNewDiscussion.equals(module)) {
+                        oldIdModuleOfDiscussionListNewDiscussion.getDiscussionList().remove(discussionListNewDiscussion);
+                        oldIdModuleOfDiscussionListNewDiscussion = em.merge(oldIdModuleOfDiscussionListNewDiscussion);
                     }
                 }
             }
@@ -192,12 +187,12 @@ public class ModuleJpaController implements Serializable {
                 }
                 illegalOrphanMessages.add("This Module (" + module + ") cannot be destroyed since the ModuleDescription " + moduleDescriptionListOrphanCheckModuleDescription + " in its moduleDescriptionList field has a non-nullable idModule field.");
             }
-            List<Foro> foroListOrphanCheck = module.getForoList();
-            for (Foro foroListOrphanCheckForo : foroListOrphanCheck) {
+            List<Discussion> discussionListOrphanCheck = module.getDiscussionList();
+            for (Discussion discussionListOrphanCheckDiscussion : discussionListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Module (" + module + ") cannot be destroyed since the Foro " + foroListOrphanCheckForo + " in its foroList field has a non-nullable idModule field.");
+                illegalOrphanMessages.add("This Module (" + module + ") cannot be destroyed since the Discussion " + discussionListOrphanCheckDiscussion + " in its discussionList field has a non-nullable idModule field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
@@ -256,14 +251,15 @@ public class ModuleJpaController implements Serializable {
             em.close();
         }
     }
-
+    
     /**
      * Método que consulta la información de un modulo por medio de su nombre
+     *
      * @param nameModule
      * @return Module
-     * @throws Exception 
+     * @throws Exception
      */
-    public Module getModuleByName(String nameModule) throws Exception{
+    public Module getModuleByName(String nameModule) throws Exception {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
@@ -271,9 +267,9 @@ public class ModuleJpaController implements Serializable {
             Root<Module> module = cq.from(Module.class);
             cq.select(module);
             List<Predicate> predicates = new ArrayList<>();
-            
+
             predicates.add(cb.equal(module.get(Module_.name), nameModule));
-            
+
             cq.where(predicates.toArray(new Predicate[predicates.size()]));
             Query q = em.createQuery(cq);
 

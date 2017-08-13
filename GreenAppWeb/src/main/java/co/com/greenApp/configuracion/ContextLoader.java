@@ -1,6 +1,7 @@
 package co.com.greenApp.configuracion;
 
-import co.com.greenApp.controllers.ForoJpaController;
+import co.com.greenApp.controllers.CommentsJpaController;
+import co.com.greenApp.controllers.DiscussionJpaController;
 import co.com.greenApp.controllers.ModuleDescriptionJpaController;
 import co.com.greenApp.controllers.ModuleJpaController;
 import co.com.greenApp.controllers.UserJpaController;
@@ -28,8 +29,11 @@ public class ContextLoader implements ServletContextListener {
         ModuleDescriptionJpaController moduleDescriptionJpaController = new ModuleDescriptionJpaController(emf);
         sce.getServletContext().setAttribute("moduleDescriptionJpaController", moduleDescriptionJpaController);
 
-        ForoJpaController foroJpaController = new ForoJpaController(emf);
-        sce.getServletContext().setAttribute("foroJpaController", foroJpaController);
+        DiscussionJpaController discussionJpaController = new DiscussionJpaController(emf);
+        sce.getServletContext().setAttribute("discussionJpaController", discussionJpaController);
+        
+        CommentsJpaController commentsJpaController = new CommentsJpaController(emf);
+        sce.getServletContext().setAttribute("commentsJpaController", commentsJpaController);
 
     }
 

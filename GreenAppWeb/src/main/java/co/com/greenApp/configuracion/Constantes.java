@@ -11,6 +11,7 @@ public class Constantes {
     public String CAPACIDAD_T_PARQUE_JORNADA = "CAPACIDAD_T_PARQUE_JORNADA";
     public String NUMERO_DIAS_PARA_CREAR_RESERVA = "NUMERO_DIAS_PARA_CREAR_RESERVA";
     public static final String SUCCESS = "0";
+    public static final String FAILURE = "-1";
     public static final String PASSWORD_DIFERENT = "1";
     public static final String NOT_EXIXTING_USER = "2";
     public static final String PATH_FILE_XLS = "C:/archivo/";

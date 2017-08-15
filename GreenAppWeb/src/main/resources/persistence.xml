@@ -6,6 +6,8 @@
     <class>co.com.greenApp.entities.Module</class>
     <class>co.com.greenApp.entities.User</class>
     <class>co.com.greenApp.entities.ModuleDescription</class>
+    <class>co.com.greenApp.entities.Discussion</class>
+    <class>co.com.greenApp.entities.Comments</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/greenapp?zeroDateTimeBehavior=convertToNull"/>
       <property name="javax.persistence.jdbc.user" value="root"/>

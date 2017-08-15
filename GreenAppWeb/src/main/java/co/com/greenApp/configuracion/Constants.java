@@ -5,7 +5,7 @@ package co.com.greenApp.configuracion;
  *
  * @author wsalazar
  */
-public class Constantes {
+public class Constants {
     
     public String CONFIGURACION_NUMERO_GRUPO = "CONFIGURACION_NUMERO_GRUPO";
     public String CAPACIDAD_T_PARQUE_JORNADA = "CAPACIDAD_T_PARQUE_JORNADA";
@@ -16,14 +16,14 @@ public class Constantes {
     public static final String NOT_EXIXTING_USER = "2";
     public static final String PATH_FILE_XLS = "C:/archivo/";
 
-    public static Constantes getInstance() {
+    public static Constants getInstance() {
         return ConstantesHolder.INSTANCE;
 
     }
 
     private static class ConstantesHolder {
 
-        private static final Constantes INSTANCE = new Constantes();
+        private static final Constants INSTANCE = new Constants();
     }
 
 }

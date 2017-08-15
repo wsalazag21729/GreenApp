@@ -13,7 +13,7 @@ public class InfoCommentsDTO implements Serializable{
     private String comment;
     private Date createTimestamp;
     private Integer idDiscussion;
-    private String userName;
+    private String nameUser;
 
     public InfoCommentsDTO() {
     }
@@ -50,11 +50,13 @@ public class InfoCommentsDTO implements Serializable{
         this.idDiscussion = idDiscussion;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getNameUser() {
+        return nameUser;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setNameUser(String nameUser) {
+        this.nameUser = nameUser;
     }
+
+    
 }

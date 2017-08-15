@@ -47,5 +47,16 @@ public interface ForoService {
     @Produces("application/json")
     @Path("saveDiscussion")
     String saveDiscussion(InfoDiscussionsDTO discussionsDTO) throws RuntimeException;
+    
+    /**
+     * Método que guarda la información de un comentario
+     * @param infoCommentDTO
+     * @return String
+     * @throws RuntimeException 
+     */
+    @POST
+    @Produces("application/json")
+    @Path("saveComment")
+    String saveComment(InfoCommentsDTO infoCommentDTO) throws RuntimeException;
 
 }

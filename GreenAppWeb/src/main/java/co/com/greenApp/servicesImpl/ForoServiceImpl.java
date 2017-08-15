@@ -1,7 +1,8 @@
 package co.com.greenApp.servicesImpl;
 
 import co.com.greenApp.configuracion.BaseService;
-import co.com.greenApp.configuracion.Constantes;
+import co.com.greenApp.configuracion.Constants;
+import co.com.greenApp.controllers.CommentsJpaController;
 import co.com.greenApp.controllers.DiscussionJpaController;
 import co.com.greenApp.controllers.ModuleJpaController;
 import co.com.greenApp.entities.Comments;
@@ -72,8 +73,8 @@ public class ForoServiceImpl extends BaseService implements ForoService {
                     commentDTO.setComment(comment.getComment());
                     commentDTO.setCreateTimestamp(comment.getCreateTimestamp());
                     commentDTO.setIdDiscussion(comment.getIdDiscussion().getIdDiscussion());
-                    commentDTO.setUserName(comment.getUserName());
-                    
+                    commentDTO.setNameUser(comment.getUserName());
+
                     listCommentsDTO.add(commentDTO);
                 }
                 return listCommentsDTO;
@@ -86,7 +87,9 @@ public class ForoServiceImpl extends BaseService implements ForoService {
         }
     }
 
-    /** {@inheritDoc } */
+    /**
+     * {@inheritDoc }
+     */
     @Override
     public String saveDiscussion(InfoDiscussionsDTO discussionsDTO) throws RuntimeException {
         try {
@@ -98,12 +101,35 @@ public class ForoServiceImpl extends BaseService implements ForoService {
             discussion.setTitle(discussionsDTO.getTitle());
             discussion.setDescription(discussionsDTO.getDescription());
             discussion.setNameUser(discussionsDTO.getNameUser());
-            
+
             discussionJpaController.create(discussion);
-            return Constantes.SUCCESS;
+            return Constants.SUCCESS;
         } catch (Exception e) {
             Logger.getLogger(ForoServiceImpl.class.getName()).log(Level.SEVERE, null, e);
-            return Constantes.FAILURE;
+            return Constants.FAILURE;
+        }
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public String saveComment(InfoCommentsDTO infoCommentDTO) throws RuntimeException {
+        try {
+            CommentsJpaController commentsJpaController = (CommentsJpaController) getContextAttribute("commentsJpaController");
+            DiscussionJpaController discussionJpaController = (DiscussionJpaController) getContextAttribute("discussionJpaController");
+            
+            Comments comment = new Comments();
+            comment.setIdDiscussion(discussionJpaController.findDiscussion(infoCommentDTO.getIdDiscussion()));
+            comment.setCreateTimestamp(new Date());
+            comment.setUserName(infoCommentDTO.getNameUser());
+            comment.setComment(infoCommentDTO.getComment());
+            
+            commentsJpaController.create(comment);
+            return Constants.SUCCESS;
+        } catch (Exception e) {
+            Logger.getLogger(ForoServiceImpl.class.getName()).log(Level.SEVERE, null, e);
+            return Constants.FAILURE;
         }
     }
 

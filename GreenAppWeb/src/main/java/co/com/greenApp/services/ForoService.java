@@ -1,6 +1,8 @@
 
 package co.com.greenApp.services;
 
+import co.com.greenApp.foro.dto.FilterCommentsDTO;
+import co.com.greenApp.foro.dto.FilterDiscussionDTO;
 import co.com.greenApp.foro.dto.InfoCommentsDTO;
 import co.com.greenApp.foro.dto.InfoDiscussionsDTO;
 import java.util.List;
@@ -17,25 +19,25 @@ public interface ForoService {
     
     /**
      * Método que obtiene la información de las discusiones de un modulo
-     * @param idModule
+     * @param fdfto
      * @return List<InfoDiscussions>
      * @throws RuntimeException 
      */
     @POST
     @Produces("application/json")
     @Path("getInfoDiscussions")
-    List<InfoDiscussionsDTO> getInfoDiscussions(String idModule) throws RuntimeException;
+    List<InfoDiscussionsDTO> getInfoDiscussions(FilterDiscussionDTO fdfto) throws RuntimeException;
     
     /**
      * Método que consulta la lista de comentarios de una discusión
-     * @param idDiscussion
+     * @param commentsDTO
      * @return List<InfoComments>
      * @throws RuntimeException 
      */
     @POST
     @Produces("application/json")
     @Path("getInfoComments")
-    List<InfoCommentsDTO> getInfoComments(String idDiscussion) throws RuntimeException;
+    List<InfoCommentsDTO> getInfoComments(FilterCommentsDTO commentsDTO) throws RuntimeException;
     
     /**
      * Método que guarda la información de una discusión

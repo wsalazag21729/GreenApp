@@ -31,6 +31,9 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Module.findByLinkInitialVideo", query = "SELECT m FROM Module m WHERE m.linkInitialVideo = :linkInitialVideo")})
 public class Module implements Serializable {
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idModule", fetch = FetchType.LAZY)
+    private List<ImagesModule> imagesModuleList;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -126,6 +129,15 @@ public class Module implements Serializable {
     @Override
     public String toString() {
         return "co.com.greenApp.entities.Module[ idModule=" + idModule + " ]";
+    }
+
+    @XmlTransient
+    public List<ImagesModule> getImagesModuleList() {
+        return imagesModuleList;
+    }
+
+    public void setImagesModuleList(List<ImagesModule> imagesModuleList) {
+        this.imagesModuleList = imagesModuleList;
     }
 
 }

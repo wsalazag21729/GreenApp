@@ -11,6 +11,7 @@ import co.com.greenApp.entities.ModuleDescription;
 import java.util.ArrayList;
 import java.util.List;
 import co.com.greenApp.entities.Discussion;
+import co.com.greenApp.entities.ImagesModule;
 import co.com.greenApp.entities.Module;
 import co.com.greenApp.entities.Module_;
 import javax.persistence.EntityManager;
@@ -40,6 +41,9 @@ public class ModuleJpaController implements Serializable {
         if (module.getDiscussionList() == null) {
             module.setDiscussionList(new ArrayList<Discussion>());
         }
+        if (module.getImagesModuleList() == null) {
+            module.setImagesModuleList(new ArrayList<ImagesModule>());
+        }
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -56,6 +60,12 @@ public class ModuleJpaController implements Serializable {
                 attachedDiscussionList.add(discussionListDiscussionToAttach);
             }
             module.setDiscussionList(attachedDiscussionList);
+            List<ImagesModule> attachedImagesModuleList = new ArrayList<ImagesModule>();
+            for (ImagesModule imagesModuleListImagesModuleToAttach : module.getImagesModuleList()) {
+                imagesModuleListImagesModuleToAttach = em.getReference(imagesModuleListImagesModuleToAttach.getClass(), imagesModuleListImagesModuleToAttach.getIdImagesModule());
+                attachedImagesModuleList.add(imagesModuleListImagesModuleToAttach);
+            }
+            module.setImagesModuleList(attachedImagesModuleList);
             em.persist(module);
             for (ModuleDescription moduleDescriptionListModuleDescription : module.getModuleDescriptionList()) {
                 Module oldIdModuleOfModuleDescriptionListModuleDescription = moduleDescriptionListModuleDescription.getIdModule();
@@ -73,6 +83,15 @@ public class ModuleJpaController implements Serializable {
                 if (oldIdModuleOfDiscussionListDiscussion != null) {
                     oldIdModuleOfDiscussionListDiscussion.getDiscussionList().remove(discussionListDiscussion);
                     oldIdModuleOfDiscussionListDiscussion = em.merge(oldIdModuleOfDiscussionListDiscussion);
+                }
+            }
+            for (ImagesModule imagesModuleListImagesModule : module.getImagesModuleList()) {
+                Module oldIdModuleOfImagesModuleListImagesModule = imagesModuleListImagesModule.getIdModule();
+                imagesModuleListImagesModule.setIdModule(module);
+                imagesModuleListImagesModule = em.merge(imagesModuleListImagesModule);
+                if (oldIdModuleOfImagesModuleListImagesModule != null) {
+                    oldIdModuleOfImagesModuleListImagesModule.getImagesModuleList().remove(imagesModuleListImagesModule);
+                    oldIdModuleOfImagesModuleListImagesModule = em.merge(oldIdModuleOfImagesModuleListImagesModule);
                 }
             }
             em.getTransaction().commit();
@@ -93,6 +112,8 @@ public class ModuleJpaController implements Serializable {
             List<ModuleDescription> moduleDescriptionListNew = module.getModuleDescriptionList();
             List<Discussion> discussionListOld = persistentModule.getDiscussionList();
             List<Discussion> discussionListNew = module.getDiscussionList();
+            List<ImagesModule> imagesModuleListOld = persistentModule.getImagesModuleList();
+            List<ImagesModule> imagesModuleListNew = module.getImagesModuleList();
             List<String> illegalOrphanMessages = null;
             for (ModuleDescription moduleDescriptionListOldModuleDescription : moduleDescriptionListOld) {
                 if (!moduleDescriptionListNew.contains(moduleDescriptionListOldModuleDescription)) {
@@ -108,6 +129,14 @@ public class ModuleJpaController implements Serializable {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
                     illegalOrphanMessages.add("You must retain Discussion " + discussionListOldDiscussion + " since its idModule field is not nullable.");
+                }
+            }
+            for (ImagesModule imagesModuleListOldImagesModule : imagesModuleListOld) {
+                if (!imagesModuleListNew.contains(imagesModuleListOldImagesModule)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain ImagesModule " + imagesModuleListOldImagesModule + " since its idModule field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -127,6 +156,13 @@ public class ModuleJpaController implements Serializable {
             }
             discussionListNew = attachedDiscussionListNew;
             module.setDiscussionList(discussionListNew);
+            List<ImagesModule> attachedImagesModuleListNew = new ArrayList<ImagesModule>();
+            for (ImagesModule imagesModuleListNewImagesModuleToAttach : imagesModuleListNew) {
+                imagesModuleListNewImagesModuleToAttach = em.getReference(imagesModuleListNewImagesModuleToAttach.getClass(), imagesModuleListNewImagesModuleToAttach.getIdImagesModule());
+                attachedImagesModuleListNew.add(imagesModuleListNewImagesModuleToAttach);
+            }
+            imagesModuleListNew = attachedImagesModuleListNew;
+            module.setImagesModuleList(imagesModuleListNew);
             module = em.merge(module);
             for (ModuleDescription moduleDescriptionListNewModuleDescription : moduleDescriptionListNew) {
                 if (!moduleDescriptionListOld.contains(moduleDescriptionListNewModuleDescription)) {
@@ -147,6 +183,17 @@ public class ModuleJpaController implements Serializable {
                     if (oldIdModuleOfDiscussionListNewDiscussion != null && !oldIdModuleOfDiscussionListNewDiscussion.equals(module)) {
                         oldIdModuleOfDiscussionListNewDiscussion.getDiscussionList().remove(discussionListNewDiscussion);
                         oldIdModuleOfDiscussionListNewDiscussion = em.merge(oldIdModuleOfDiscussionListNewDiscussion);
+                    }
+                }
+            }
+            for (ImagesModule imagesModuleListNewImagesModule : imagesModuleListNew) {
+                if (!imagesModuleListOld.contains(imagesModuleListNewImagesModule)) {
+                    Module oldIdModuleOfImagesModuleListNewImagesModule = imagesModuleListNewImagesModule.getIdModule();
+                    imagesModuleListNewImagesModule.setIdModule(module);
+                    imagesModuleListNewImagesModule = em.merge(imagesModuleListNewImagesModule);
+                    if (oldIdModuleOfImagesModuleListNewImagesModule != null && !oldIdModuleOfImagesModuleListNewImagesModule.equals(module)) {
+                        oldIdModuleOfImagesModuleListNewImagesModule.getImagesModuleList().remove(imagesModuleListNewImagesModule);
+                        oldIdModuleOfImagesModuleListNewImagesModule = em.merge(oldIdModuleOfImagesModuleListNewImagesModule);
                     }
                 }
             }
@@ -193,6 +240,13 @@ public class ModuleJpaController implements Serializable {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
                 illegalOrphanMessages.add("This Module (" + module + ") cannot be destroyed since the Discussion " + discussionListOrphanCheckDiscussion + " in its discussionList field has a non-nullable idModule field.");
+            }
+            List<ImagesModule> imagesModuleListOrphanCheck = module.getImagesModuleList();
+            for (ImagesModule imagesModuleListOrphanCheckImagesModule : imagesModuleListOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Module (" + module + ") cannot be destroyed since the ImagesModule " + imagesModuleListOrphanCheckImagesModule + " in its imagesModuleList field has a non-nullable idModule field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
